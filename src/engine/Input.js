@@ -38,8 +38,11 @@ export class Input {
 
     this.gamepadLookSpeed = GAMEPAD_LOOK;
     this.touchLookScale = 0.9;
-    this.touchEnabled = typeof navigator !== 'undefined'
-      && (('ontouchstart' in window) || navigator.maxTouchPoints > 0);
+    // Do NOT use maxTouchPoints / ontouchstart alone — Windows Chrome often
+    // reports a digitizer even on pure mouse desktops, which would flash the
+    // on-screen joystick. Prefer coarse primary pointer (phones/tablets);
+    // hybrids still unlock on the first real touchstart in _setupTouch().
+    this.touchEnabled = prefersTouchUI();
 
     this._onKeyDown = (e) => {
       const code = e.code;
@@ -183,7 +186,8 @@ export class Input {
     this.touchRoot = root;
 
     document.body.classList.toggle('has-touch', this.touchEnabled);
-    // Hybrid devices (touch + mouse) only reveal controls once a touch happens.
+    // Hybrid (Surface, touch laptop): keep mouse UI until an actual finger
+    // touch. Ignore mouse-synthesized events; only real touch starts count.
     window.addEventListener('touchstart', () => {
       this.touchEnabled = true;
       document.body.classList.add('has-touch');
@@ -268,4 +272,14 @@ function deadzone(v, dz = STICK_DEADZONE) {
   const a = Math.abs(v);
   if (a < dz) return 0;
   return Math.sign(v) * ((a - dz) / (1 - dz));
+}
+
+/** True when the primary pointer is finger-sized (phones / pure tablets). */
+function prefersTouchUI() {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
+  }
 }

@@ -303,8 +303,9 @@ kbd {
 
 /* ----------------------------------------------------------- touch controls
  * On-screen joystick / look-drag / action buttons for phones + tablets.
- * Hidden entirely unless a touch device is detected (body.has-touch). Sits
- * above the HUD (z-index 10) but below banners/menus (20/30) so overlays
+ * Hidden unless body.has-touch (coarse primary pointer, or a real
+ * touchstart on a hybrid — not maxTouchPoints, which many desktops report).
+ * Above the HUD (z-index 10) but below banners/menus (20/30) so overlays
  * still block it during menu, pause, and victory. */
 .touch-controls { display: none; }
 body.has-touch .touch-controls {
