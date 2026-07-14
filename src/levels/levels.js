@@ -177,4 +177,149 @@ export const LEVELS = [
     ],
     exit: { pos: [0, 8, -13] },
   },
+
+  // ------------------------------------------------------------------ 5
+  {
+    id: 'choir',
+    name: 'V · The Rising Choir',
+    subtitle: 'Some songs are only heard from above.',
+    quote: 'Kindle the ground, ride the light, then let a bridge finish the climb.',
+    palette: { floor: 0x24303a, wall: 0x131b22, accent: CYAN },
+    fog: { color: 0x060c12, near: 6, far: 60 },
+    ambient: 0.13,
+    spawn: { x: 0, z: 14, yaw: 0 },
+    boxes: [
+      // entry floor (z 5..17), top y=0
+      { pos: [0, -0.5, 11], size: [18, 1, 12], role: 'floor' },
+      // mid shelf (z -6..0), top y=5 — reached by riding the lift
+      { pos: [0, 4.5, -3], size: [10, 1, 6], role: 'floor' },
+      // far shelf (z -15.5..-10.5), top y=5 — holds the last beacon + exit
+      { pos: [0, 4.5, -13], size: [10, 1, 5], role: 'floor' },
+      // perimeter walls
+      { pos: [-9, 7, -3], size: [1, 22, 44], role: 'wall' },
+      { pos: [9, 7, -3], size: [1, 22, 44], role: 'wall' },
+      { pos: [0, 7, 17.5], size: [20, 22, 1], role: 'wall' },
+      { pos: [0, 7, -17], size: [20, 22, 1], role: 'wall' },
+      // guide ledge beside the lift landing
+      { pos: [-6, 0.4, 4], size: [2, 0.8, 2], role: 'ledge' },
+    ],
+    crystals: [
+      { pos: [4, 0.9, 14], color: GREEN }, // -> 'ground' (arms the lift)
+      { pos: [-4, 0.9, 14], color: CYAN }, // carry up the lift -> 'mid'
+      { pos: [3, 5.4, -3], color: AMBER }, // waits on mid shelf, carry across bridge -> 'far'
+    ],
+    beacons: [
+      { id: 'ground', pos: [-5, 11], color: GREEN }, // on entry floor
+      { id: 'mid', pos: [-2, -3], y: 5, color: CYAN }, // on mid shelf
+      { id: 'far', pos: [0, -13], y: 5, color: AMBER }, // on far shelf
+    ],
+    bridges: [
+      // mid shelf -> far shelf, appears once 'mid' is lit
+      { pos: [0, 4.9, -8.25], size: [3.5, 0.3, 5], requires: 'mid', color: CYAN },
+    ],
+    movers: [
+      // lift: entry (y0) -> mid shelf (y5), armed by 'ground'
+      { id: 'lift', pos: [0, 0, 2.5], size: [4, 0.5, 4], travel: 5, speed: 1.1, requires: 'ground', color: GREEN },
+    ],
+    exit: { pos: [0, 5, -13] },
+  },
+
+  // ------------------------------------------------------------------ 6
+  {
+    id: 'shaft',
+    name: 'VI · The Long Shaft',
+    subtitle: 'The only way out is up.',
+    quote: 'Four lights, one shaft. Ride each in turn, and do not look down.',
+    palette: { floor: 0x332a24, wall: 0x18120d, accent: AMBER },
+    fog: { color: 0x0c0806, near: 6, far: 64 },
+    ambient: 0.12,
+    spawn: { x: 0, z: 14, yaw: 0 },
+    boxes: [
+      // T0 entry (z 6..18), top y=0
+      { pos: [0, -0.5, 12], size: [16, 1, 12], role: 'floor' },
+      // T1 (z -4..2), top y=4
+      { pos: [0, 3.5, -1], size: [10, 1, 6], role: 'floor' },
+      // T2 (z -14..-8), top y=8
+      { pos: [0, 7.5, -11], size: [10, 1, 6], role: 'floor' },
+      // T3 top (z -24..-18), top y=12 — last beacon + exit
+      { pos: [0, 11.5, -21], size: [12, 1, 6], role: 'floor' },
+      // perimeter walls (a deep shaft)
+      { pos: [-9, 10, -3], size: [1, 30, 48], role: 'wall' },
+      { pos: [9, 10, -3], size: [1, 30, 48], role: 'wall' },
+      { pos: [0, 10, 18.5], size: [20, 30, 1], role: 'wall' },
+      { pos: [0, 10, -24.5], size: [20, 30, 1], role: 'wall' },
+    ],
+    crystals: [
+      { pos: [4, 0.9, 15], color: AMBER }, // -> 'b0' (arms lift L1)
+      { pos: [-3, 0.9, 15], color: CYAN }, // ride L1 -> 'b1' (arms L2)
+      { pos: [3, 4.9, -1], color: GREEN }, // waits on T1, ride L2 -> 'b2' (arms L3)
+      { pos: [3, 8.9, -11], color: VIOLET }, // waits on T2, ride L3 -> 'b3'
+    ],
+    beacons: [
+      { id: 'b0', pos: [-5, 12], color: AMBER }, // on T0
+      { id: 'b1', pos: [0, -1], y: 4, color: CYAN }, // on T1
+      { id: 'b2', pos: [0, -11], y: 8, color: GREEN }, // on T2
+      { id: 'b3', pos: [0, -21], y: 12, color: VIOLET }, // on T3
+    ],
+    bridges: [],
+    movers: [
+      // L1: T0 (y0) -> T1 (y4), armed by 'b0'
+      { id: 'L1', pos: [0, 0, 4], size: [4, 0.5, 4], travel: 4, speed: 1.15, requires: 'b0', color: AMBER },
+      // L2: T1 (y4) -> T2 (y8), armed by 'b1'
+      { id: 'L2', pos: [0, 4, -6], size: [4, 0.5, 4], travel: 4, speed: 1.0, requires: 'b1', color: CYAN },
+      // L3: T2 (y8) -> T3 (y12), armed by 'b2'
+      { id: 'L3', pos: [0, 8, -16], size: [4, 0.5, 4], travel: 4, speed: 1.1, requires: 'b2', color: GREEN },
+    ],
+    exit: { pos: [0, 12, -21] },
+  },
+
+  // ------------------------------------------------------------------ 7
+  {
+    id: 'finale',
+    name: 'VII · Where the Dark Ends',
+    subtitle: 'Every light you carried leads here.',
+    quote: 'Bridge, and rise, and bridge again. The last socket waits at the end of the dark.',
+    palette: { floor: 0x2c2740, wall: 0x161226, accent: VIOLET },
+    fog: { color: 0x0a0714, near: 6, far: 70 },
+    ambient: 0.12,
+    spawn: { x: 0, z: 15, yaw: 0 },
+    boxes: [
+      // entry floor (z 8..18), top y=0
+      { pos: [0, -0.5, 13], size: [16, 1, 10], role: 'floor' },
+      // island M (z -1..5), top y=0 — across the first chasm
+      { pos: [0, -0.5, 2], size: [8, 1, 6], role: 'floor' },
+      // high ledge H (z -10.5..-5.5), top y=5 — reached by the lift
+      { pos: [0, 4.5, -8], size: [10, 1, 5], role: 'floor' },
+      // exit ledge E (z -17.5..-12.5), top y=5
+      { pos: [0, 4.5, -15], size: [10, 1, 5], role: 'floor' },
+      // perimeter walls
+      { pos: [-9, 7, 0], size: [1, 24, 42], role: 'wall' },
+      { pos: [9, 7, 0], size: [1, 24, 42], role: 'wall' },
+      { pos: [0, 7, 18.5], size: [22, 24, 1], role: 'wall' },
+      { pos: [0, 7, -19], size: [22, 24, 1], role: 'wall' },
+    ],
+    crystals: [
+      { pos: [4, 0.9, 14], color: AMBER }, // -> 'a' (arms bridge 1)
+      { pos: [-4, 0.9, 14], color: CYAN }, // carry across bridge 1 -> 'b' (arms lift)
+      { pos: [3, 0.9, 2], color: GREEN }, // waits on island M, ride lift -> 'c' (arms bridge 2)
+      { pos: [3, 5.4, -8], color: VIOLET }, // waits on high ledge, carry across bridge 2 -> 'd'
+    ],
+    beacons: [
+      { id: 'a', pos: [-5, 13], color: AMBER }, // on entry floor
+      { id: 'b', pos: [0, 2], color: CYAN }, // on island M
+      { id: 'c', pos: [-3, -8], y: 5, color: GREEN }, // on high ledge H
+      { id: 'd', pos: [0, -15], y: 5, color: VIOLET }, // on exit ledge E
+    ],
+    bridges: [
+      // entry -> island M, appears once 'a' is lit
+      { pos: [0, -0.1, 6.5], size: [3, 0.3, 4], requires: 'a', color: AMBER },
+      // high ledge -> exit ledge, appears once 'c' is lit
+      { pos: [0, 4.9, -11.5], size: [3.5, 0.3, 4], requires: 'c', color: GREEN },
+    ],
+    movers: [
+      // lift: island M (y0) -> high ledge H (y5), armed by 'b'
+      { id: 'lift', pos: [0, 0, -3], size: [4, 0.5, 4], travel: 5, speed: 1.05, requires: 'b', color: CYAN },
+    ],
+    exit: { pos: [0, 5, -15] },
+  },
 ];
