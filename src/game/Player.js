@@ -109,9 +109,13 @@ export class Player {
 
     const colliders = this.world.colliders();
     this.grounded = false;
+    // Resolve Y first so a rising platform re-seats the feet on its top BEFORE
+    // the horizontal passes run. Otherwise a lift that moved up since the last
+    // re-seat leaves a residual vertical overlap that the X/Z passes misread as
+    // a side collision, ejecting the player sideways off the platform.
+    this._moveAxis('y', this.vel.y * dt, colliders);
     this._moveAxis('x', this.vel.x * dt, colliders);
     this._moveAxis('z', this.vel.z * dt, colliders);
-    this._moveAxis('y', this.vel.y * dt, colliders);
 
     // fell into the void — respawn at level spawn
     if (this.pos.y < -14) this.reset();
