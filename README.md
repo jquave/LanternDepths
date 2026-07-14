@@ -9,7 +9,10 @@ chasms — the darkness only yields to a path you illuminate yourself.
 
 ## Play
 
-No build step, no install. Any static server works; a zero-dependency one ships
+**Live:** [https://jquave.github.io/LanternDepths/](https://jquave.github.io/LanternDepths/)
+
+No build step, no install. The game is static files under `src/` (served as-is on
+GitHub Pages). Locally, any static server works; a zero-dependency one ships
 with the repo:
 
 ```bash
