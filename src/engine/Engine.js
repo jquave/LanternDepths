@@ -49,9 +49,9 @@ export class Engine {
 
     this.bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.85, // strength
-      0.7, // radius
-      0.85, // threshold
+      0.5, // strength (was 0.85 — a bit milky on bright crystals)
+      0.55, // radius
+      0.92, // threshold — only the brightest emissives bloom
     );
     this.composer.addPass(this.bloomPass);
 
