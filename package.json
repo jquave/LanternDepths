@@ -1,0 +1,13 @@
+{
+  "name": "the-lantern-depths",
+  "version": "0.1.0",
+  "description": "An atmospheric, multi-level 3D puzzle game — carry the light, wake the beacons, descend.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js 8080",
+    "test": "node test/smoke.mjs",
+    "check": "node --check src/main.js && node --check src/engine/Engine.js && node --check src/engine/Input.js && node --check src/engine/Audio.js && node --check src/engine/Juice.js && node --check src/game/Game.js && node --check src/game/World.js && node --check src/game/Player.js && node --check src/game/UI.js && node --check src/levels/levels.js && node --check server.js"
+  },
+  "license": "MIT"
+}
